@@ -9,8 +9,7 @@ A straightforward mod that introduces a window for saving teleport locations on 
 
 ## Usage
 
-See [Video](Teleporter.gif) for details.
-
+![Teleporter](Teleporter.gif)
 
 ## Project Setup
 
