@@ -14,14 +14,13 @@ public sealed class TeleporterPlugin : SingletonPluginBase<TeleporterPlugin>
 {
     private const string PluginIdentifier = "CzBuCHi.Teleporter";
 
-
     private readonly IModdingContext _Context;
     private readonly Settings        _Settings;
 
     public TeleporterPlugin(IModdingContext context, IUIHelper uiHelper) {
         _Context = context;
 
-        _Settings = _Context.LoadSettingsData<Settings>("Teleporter") ?? new Settings();
+        _Settings = _Context.LoadSettingsData<Settings>(PluginIdentifier) ?? new Settings();
     }
 
     private Messenger _Messenger = null!;
@@ -29,7 +28,7 @@ public sealed class TeleporterPlugin : SingletonPluginBase<TeleporterPlugin>
     public static Settings Settings => Shared!._Settings;
 
     public static void SaveSettings() {
-        Shared!._Context.SaveSettingsData("Teleporter", Shared._Settings);
+        Shared!._Context.SaveSettingsData(PluginIdentifier, Shared._Settings);
     }
 
     public override void OnEnable() {

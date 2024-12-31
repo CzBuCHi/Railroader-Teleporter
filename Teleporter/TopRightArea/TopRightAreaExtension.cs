@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using Serilog;
+using UI.Tooltips;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -16,26 +17,21 @@ public static class TopRightAreaExtension
             return;
         }
 
-        var strip = topRightArea.transform.Find("Strip");
-        if (strip == null) {
-            return;
-        }
-
-        var gameObject = new GameObject("TeleporterButton") {
-            transform = { parent = strip }
-        };
+        var componentInChildren = topRightArea.transform.Find("Strip").gameObject.GetComponentInChildren<Button>();
+        var gameObject          = Object.Instantiate(componentInChildren.gameObject, componentInChildren.transform.parent);
         gameObject.transform.SetSiblingIndex(9);
 
-        var button = gameObject.AddComponent<Button>();
+        gameObject.GetComponent<UITooltipProvider>().TooltipInfo = new TooltipInfo("Teleporter", string.Empty);
+
+        var button = gameObject.GetComponent<Button>();
+        button.onClick = new Button.ButtonClickedEvent();
         button.onClick.AddListener(() => onClick());
 
-        var image = gameObject.AddComponent<Image>();
-        image.sprite = Sprite.Create(_ConstructionIcon, new Rect(0, 0, 24, 24), new Vector2(0.5f, 0.5f))!;
-        image.rectTransform!.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 32);
-        image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 32);
+        var image = gameObject.GetComponent<Image>();
+        image.sprite = Sprite.Create(_Icon, new Rect(0.0f, 0.0f, 24, 24), new Vector2(0.0f, 0.0f));
     }
 
-    private static readonly Texture2D _ConstructionIcon = LoadTexture2D("icon.png", 24, 24);
+    private static readonly Texture2D _Icon = LoadTexture2D("icon.png", 24, 24);
 
     private static byte[] GetBytes(string path) {
         var       assembly = Assembly.GetExecutingAssembly();
@@ -49,7 +45,7 @@ public static class TopRightAreaExtension
         try {
             var bytes   = GetBytes($"{typeof(TopRightAreaExtension).Namespace}.{path}");
             var texture = new Texture2D(width, height);
-            texture.LoadImage(bytes);
+            texture.LoadImage(bytes, true);
             return texture;
         } catch (Exception e) {
             Log.Error(e, "Failed to load texture {0}", path);
