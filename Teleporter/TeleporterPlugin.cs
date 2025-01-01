@@ -49,7 +49,7 @@ public sealed class TeleporterPlugin : SingletonPluginBase<TeleporterPlugin>
     }
 
     private void OnMapDidLoad(MapDidLoadEvent @event) {
-        TopRightAreaExtension.AddButton(TeleporterWindow.Toggle);
+        TopRightAreaExtension.AddButton("icon.png", "Teleporter", 9, TeleporterWindow.Toggle);
     }
 
     private void OnMapDidUnload(MapDidUnloadEvent @event) {
